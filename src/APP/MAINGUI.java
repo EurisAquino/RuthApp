@@ -181,7 +181,9 @@ public class MAINGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void btnMercanciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMercanciaActionPerformed
-        // TODO add your handling code here:
+        this.setVisible(false);
+        RegistrarMercancia mer = new RegistrarMercancia();
+        mer.setVisible(true);
     }//GEN-LAST:event_btnMercanciaActionPerformed
 
     public static void main(String args[]) {

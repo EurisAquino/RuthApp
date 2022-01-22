@@ -150,13 +150,7 @@ public class GUI extends javax.swing.JFrame {
         
         if((txtUser.getText() == null ? user == null : txtUser.getText().equals(user)) && (txtPass.getText() == null ? pass == null : txtPass.getText().equals(pass))){
             Limpiar();
-            gui.setVisible(false);
-            gui.hide();
-            jPanel1.hide();
-            jLabel1.setVisible(false);
-            jPanel1.setVisible(false);
-            jPanel2.setVisible(false);
-            jPanel3.setVisible(false);
+            this.setVisible(false);
             main.setVisible(true);
             
         }else{

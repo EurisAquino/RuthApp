@@ -4,6 +4,7 @@
  */
 package APP;
 
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 public class GUI extends javax.swing.JFrame {
@@ -22,7 +23,7 @@ public class GUI extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtUser = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnAcceder = new javax.swing.JButton();
         txtPass = new javax.swing.JPasswordField();
         jPanel2 = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
@@ -49,15 +50,36 @@ public class GUI extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Usuario");
 
-        jButton1.setBackground(new java.awt.Color(72, 57, 185));
-        jButton1.setText("Acceder");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+        txtUser.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        txtUser.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtUserKeyTyped(evt);
             }
         });
 
+        btnAcceder.setBackground(new java.awt.Color(72, 57, 185));
+        btnAcceder.setText("Acceder");
+        btnAcceder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAccederActionPerformed(evt);
+            }
+        });
+        btnAcceder.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnAccederKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                btnAccederKeyTyped(evt);
+            }
+        });
+
+        txtPass.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         txtPass.setName("txtPasword"); // NOI18N
+        txtPass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPassKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -79,7 +101,7 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(121, 121, 121)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAcceder, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(124, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -94,8 +116,8 @@ public class GUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addComponent(jButton1)
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addComponent(btnAcceder)
+                .addContainerGap(68, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 100, 340, 320));
@@ -142,7 +164,7 @@ public class GUI extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnAccederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAccederActionPerformed
         String user = "ruth";
         String pass = "0505";
         MAINGUI main = new MAINGUI();
@@ -157,7 +179,7 @@ public class GUI extends javax.swing.JFrame {
             Limpiar();
             JOptionPane.showMessageDialog(gui, "Clave o usuario incorrecto");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnAccederActionPerformed
 
     public void Limpiar(){
         txtUser.setText("");
@@ -166,6 +188,28 @@ public class GUI extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void btnAccederKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnAccederKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAccederKeyPressed
+
+    private void btnAccederKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnAccederKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAccederKeyTyped
+
+    private void txtUserKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUserKeyTyped
+        char cTeclaPresionada = evt.getKeyChar();
+        if(cTeclaPresionada == KeyEvent.VK_ENTER){
+            btnAcceder.doClick();
+        }
+    }//GEN-LAST:event_txtUserKeyTyped
+
+    private void txtPassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPassKeyTyped
+        char cTeclaPresionada = evt.getKeyChar();
+        if(cTeclaPresionada == KeyEvent.VK_ENTER){
+            btnAcceder.doClick();
+        }
+    }//GEN-LAST:event_txtPassKeyTyped
 
     
     public static void main(String args[]) {
@@ -201,7 +245,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnAcceder;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

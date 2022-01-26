@@ -99,7 +99,7 @@ public class Conexion {
     
     public void actualizarProducto(Productos pro){
     conectar();
-        String sql ="UPDATE productos SET nombre= '"+ pro.getNombre() +"', cantidad = '"+ pro.getCantidad() +"', precio = '"+ pro.getPrecio() +"', nota = '"+ pro.getNota() +"' where id = '"+ pro.getId() +"'";
+        String sql ="UPDATE productos SET nombre= '"+ pro.getNombre() +"', cantidad = '"+ pro.getCantidad() +"', precio = '"+ pro.getPrecio() +"' where id = '"+ pro.getId() +"'";
                 
         try {
             stmnt.executeUpdate(sql);
@@ -114,7 +114,7 @@ public class Conexion {
     public void buscarProducto(Productos pro){
         conectar();
 
-        String sql = "SELECT id,nombre,cantidad,precio,nota FROM productos WHERE nombre = "
+        String sql = "SELECT id,nombre,cantidad,precio FROM productos WHERE nombre = "
                 + pro.getNombre();
                 
         try {

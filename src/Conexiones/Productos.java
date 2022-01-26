@@ -5,15 +5,14 @@ package Conexiones;
  */
 public class Productos {
     
-    public Productos(String Nombre, String cantidad, String Precio,String Nota) {
+    public Productos(String Nombre, String cantidad, String Precio) {
         this.Nombre = Nombre;
         this.Cantidad = cantidad;
         this.Precio = Precio;
-        this.Nota = Nota;
-        this.Id = Id;
     }
 
-    public Productos(String Nombre, String Cantidad, String Precio) {
+    public Productos(int Id, String Nombre, String Cantidad, String Precio) {
+        this.Id = Id;
         this.Nombre = Nombre;
         this.Cantidad = Cantidad;
         this.Precio = Precio;
@@ -22,6 +21,10 @@ public class Productos {
     // ID
     
     private int Id;
+    
+    public Productos(int Id) {
+        this.Id = Id;
+    }
     
     public int getId() {
         return Id;
@@ -35,6 +38,10 @@ public class Productos {
     //Nombre
     
     private String Nombre;
+
+    public Productos(String Nombre) {
+        this.Nombre = Nombre;
+    }
 
     public String getNombre() {
         return Nombre;
@@ -67,18 +74,6 @@ public class Productos {
 
     public void setPrecio(String precio) {
         this.Precio = precio;
-    }
-    
-    //Fecha
-    
-    private String Nota;
-
-    public String getNota() {
-        return Nota;
-    }
-
-    public void setNota(String Nota) {
-        this.Nota = Nota;
     }
     
 }

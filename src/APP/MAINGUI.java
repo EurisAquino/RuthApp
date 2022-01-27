@@ -74,6 +74,11 @@ public class MAINGUI extends javax.swing.JFrame {
         btnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/Cliente2.png"))); // NOI18N
         btnClientes.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnClientes.setBorderPainted(false);
+        btnClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClientesActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnClientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 260, 90, 70));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -185,6 +190,12 @@ public class MAINGUI extends javax.swing.JFrame {
         RegistrarMercancia mer = new RegistrarMercancia();
         mer.setVisible(true);
     }//GEN-LAST:event_btnMercanciaActionPerformed
+
+    private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
+        this.setVisible(false);
+        CLIENTES cli = new CLIENTES();
+        cli.setVisible(true);
+    }//GEN-LAST:event_btnClientesActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

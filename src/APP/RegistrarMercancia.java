@@ -45,7 +45,6 @@ public class RegistrarMercancia extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         JTableMercancia = new javax.swing.JTable();
         txtId = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
@@ -62,6 +61,7 @@ public class RegistrarMercancia extends javax.swing.JFrame {
         btnActualizar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -112,8 +112,6 @@ public class RegistrarMercancia extends javax.swing.JFrame {
             JTableMercancia.getColumnModel().getColumn(0).setMinWidth(35);
             JTableMercancia.getColumnModel().getColumn(0).setMaxWidth(35);
         }
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/FondoMAIN.jpg"))); // NOI18N
 
         jButton4.setBackground(new java.awt.Color(255, 204, 102));
         jButton4.setText("_");
@@ -252,6 +250,8 @@ public class RegistrarMercancia extends javax.swing.JFrame {
         );
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 290, -1));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/FondoMAIN.jpg"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

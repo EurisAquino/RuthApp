@@ -154,6 +154,11 @@ public class CLIENTES extends javax.swing.JFrame {
 
         btnREACVENTA.setBackground(new java.awt.Color(204, 146, 215));
         btnREACVENTA.setText("REGISTRAR");
+        btnREACVENTA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnREACVENTAActionPerformed(evt);
+            }
+        });
         jPanel4.add(btnREACVENTA, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, -1, -1));
 
         getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 340, 270, 130));
@@ -171,7 +176,8 @@ public class CLIENTES extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnREACCLIENTEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnREACCLIENTEActionPerformed
-        this.setVisible(false);
+        REACCLIENTE cliente = new REACCLIENTE();
+        cliente.setVisible(true);
     }//GEN-LAST:event_btnREACCLIENTEActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -188,6 +194,11 @@ public class CLIENTES extends javax.swing.JFrame {
 
         main.setVisible(true);
     }//GEN-LAST:event_btnRegresar6ActionPerformed
+
+    private void btnREACVENTAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnREACVENTAActionPerformed
+        REACVENTE venta = new REACVENTE();
+        venta.setVisible(true);
+    }//GEN-LAST:event_btnREACVENTAActionPerformed
 
     /**
      * @param args the command line arguments

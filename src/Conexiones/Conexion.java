@@ -85,6 +85,22 @@ public class Conexion {
 
     }
     
+    public void insertarClientes(Clientes cli) {
+        conectar();
+
+        String sql = "INSERT INTO clientes(nombre, deuda, abono, pendiente) "
+                + "VALUES('" + cli.getNombreCliente()+ "', "
+                + "'" + cli.getDeuda() + "', "
+                + "'" + cli.getAbono() + "', "
+                + cli.getResultante() + ")";
+
+        tryCon(sql);
+        JOptionPane.showMessageDialog(null, "Cliente Agregado");
+        
+        desconectar();
+
+    }
+    
     public void borrarProducto(Productos pro){
         conectar();
         
@@ -97,13 +113,38 @@ public class Conexion {
         desconectar();
     }
     
+    public void borrarClientes(Clientes cli){
+        conectar();
+        
+        String sql = "DELETE FROM clientes WHERE id = "
+                + cli.getId();
+        
+        tryCon(sql);
+        JOptionPane.showMessageDialog(null, "Cliente Eliminado");
+        
+        desconectar();
+    }
+    
     public void actualizarProducto(Productos pro){
     conectar();
-        String sql ="UPDATE productos SET nombre= '"+ pro.getNombre() +"', cantidad = '"+ pro.getCantidad() +"', precio = '"+ pro.getPrecio() +"' where id = '"+ pro.getId() +"'";
-                
+        String sql ="UPDATE productos SET nombre= '"+ pro.getNombre()+"', cantidad = '"+ pro.getCantidad() +"', precio = '"+ pro.getPrecio() +"' where id = '"+ pro.getId()+"'";        
         try {
             stmnt.executeUpdate(sql);
             JOptionPane.showMessageDialog(null, "Producto Modificado");
+        } catch (SQLException ex) {
+        }
+
+        desconectar();
+
+    }
+    
+    public void actualizarClientes(Productos pro){
+    conectar();
+        String sql ="UPDATE clientes SET nombre= '"+ pro.getNombreCliente()+"', deuda = '"+ pro.getDeuda() +"', abono = '"+ pro.getAbono() +"', pendiente = '" + pro.getPendiente() +"' where id = '"+ pro.getIdCliente()+"'";
+                
+        try {
+            stmnt.executeUpdate(sql);
+            JOptionPane.showMessageDialog(null, "Cliente Modificado");
         } catch (SQLException ex) {
         }
 
@@ -116,6 +157,20 @@ public class Conexion {
 
         String sql = "SELECT id,nombre,cantidad,precio FROM productos WHERE nombre = "
                 + pro.getNombre();
+                
+        try {
+            ResultSet executeQuery = stmnt.executeQuery(sql);
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+        }
+        desconectar();
+    }
+    
+    public void buscarCliente(Productos pro){
+        conectar();
+
+        String sql = "SELECT id,nombre,deuda,abono,pendiente FROM clientes WHERE id = "
+                + pro.getIdCliente();
                 
         try {
             ResultSet executeQuery = stmnt.executeQuery(sql);

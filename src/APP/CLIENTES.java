@@ -4,6 +4,17 @@
  */
 package APP;
 
+import Conexiones.Clientes;
+import Conexiones.Conexion;
+import Conexiones.Productos;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author euris
@@ -15,6 +26,8 @@ public class CLIENTES extends javax.swing.JFrame {
      */
     public CLIENTES() {
         initComponents();
+        cargarTabla();
+        txtId.setVisible(false);
     }
 
     /**
@@ -28,18 +41,29 @@ public class CLIENTES extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        clientesTable = new javax.swing.JTable();
         jButton4 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         btnRegresar6 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        btnREACCLIENTE = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        btnREACVENTA = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        btnBorrar = new javax.swing.JButton();
+        btnLimpiar = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        txtNombre = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtAbono = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txtResultante = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        txtDeuda = new javax.swing.JTextField();
+        btnActualizar = new javax.swing.JButton();
+        txtId = new javax.swing.JTextField();
+        btnBuscar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -49,16 +73,18 @@ public class CLIENTES extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(76, 49, 109));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        clientesTable.setBackground(new java.awt.Color(204, 204, 255));
+        clientesTable.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        clientesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "NOMBRE", "DEUDA", "ABONO", "RESULTANTE"
+                "ID", "NOMBRE", "DEUDA", "ABONO", "PENDIENTE"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false
@@ -72,15 +98,20 @@ public class CLIENTES extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setMinWidth(35);
-            jTable1.getColumnModel().getColumn(0).setMaxWidth(35);
+        clientesTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                clientesTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(clientesTable);
+        if (clientesTable.getColumnModel().getColumnCount() > 0) {
+            clientesTable.getColumnModel().getColumn(0).setMinWidth(35);
+            clientesTable.getColumnModel().getColumn(0).setMaxWidth(35);
         }
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 520, 520));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 70, 540, 540));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 50, 540, 540));
 
         jButton4.setBackground(new java.awt.Color(255, 204, 102));
         jButton4.setText("_");
@@ -120,65 +151,123 @@ public class CLIENTES extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 630, Short.MAX_VALUE)
+            .addGap(0, 650, Short.MAX_VALUE)
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 60, 630));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 60, 650));
 
-        jPanel3.setBackground(new java.awt.Color(87, 27, 120));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jLabel5.setText("TOTAL PENDIENTE");
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("REGISTRAR / ACTUALIZAR CLIENTE");
-        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 93, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addComponent(jLabel5)
+                .addGap(0, 4, Short.MAX_VALUE))
+        );
 
-        btnREACCLIENTE.setBackground(new java.awt.Color(204, 146, 215));
-        btnREACCLIENTE.setText("REGISTRAR");
-        btnREACCLIENTE.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnREACCLIENTEActionPerformed(evt);
-            }
-        });
-        jPanel3.add(btnREACCLIENTE, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, -1, -1));
-
-        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, 270, 120));
-
-        jPanel4.setBackground(new java.awt.Color(87, 27, 120));
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("REGISTRAR / ACTUALIZAR VENTA");
-        jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, 30));
-
-        btnREACVENTA.setBackground(new java.awt.Color(204, 146, 215));
-        btnREACVENTA.setText("REGISTRAR");
-        btnREACVENTA.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnREACVENTAActionPerformed(evt);
-            }
-        });
-        jPanel4.add(btnREACVENTA, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, -1, -1));
-
-        getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 340, 270, 130));
+        getContentPane().add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 600, 210, 20));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("CLIENTES");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 60, 120, 40));
 
+        btnBorrar.setBackground(new java.awt.Color(204, 204, 255));
+        btnBorrar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnBorrar.setText("Borrar ");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnBorrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 460, 210, 30));
+
+        btnLimpiar.setBackground(new java.awt.Color(204, 204, 255));
+        btnLimpiar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimpiarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 510, 210, 30));
+
+        btnAgregar.setBackground(new java.awt.Color(204, 204, 255));
+        btnAgregar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 360, 210, 30));
+
+        jPanel4.setBackground(new java.awt.Color(204, 204, 255));
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setText("NOMBRE");
+        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
+        jPanel4.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 160, -1));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel6.setText("ABONO");
+        jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, -1));
+        jPanel4.add(txtAbono, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, 160, -1));
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel7.setText("RESULTANTE");
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
+
+        txtResultante.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtResultanteActionPerformed(evt);
+            }
+        });
+        jPanel4.add(txtResultante, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 150, 140, -1));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel3.setText("DEUDA");
+        jPanel4.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
+        jPanel4.add(txtDeuda, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 70, 160, -1));
+
+        getContentPane().add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, 280, 200));
+
+        btnActualizar.setBackground(new java.awt.Color(204, 204, 255));
+        btnActualizar.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 410, 210, 30));
+        getContentPane().add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 80, -1));
+
+        btnBuscar.setBackground(new java.awt.Color(204, 204, 255));
+        btnBuscar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnBuscar.setText("BUSCAR");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 560, 210, -1));
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/FondoMAIN.jpg"))); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 970, 630));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 970, 650));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnREACCLIENTEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnREACCLIENTEActionPerformed
-        REACCLIENTE cliente = new REACCLIENTE();
-        cliente.setVisible(true);
-    }//GEN-LAST:event_btnREACCLIENTEActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         System.exit(0);
@@ -195,10 +284,213 @@ public class CLIENTES extends javax.swing.JFrame {
         main.setVisible(true);
     }//GEN-LAST:event_btnRegresar6ActionPerformed
 
-    private void btnREACVENTAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnREACVENTAActionPerformed
-        REACVENTE venta = new REACVENTE();
-        venta.setVisible(true);
-    }//GEN-LAST:event_btnREACVENTAActionPerformed
+    private void Limpiar(){
+        txtId.setText("");
+        txtNombre.setText("");
+        txtAbono.setText("");
+        txtDeuda.setText("");
+        txtResultante.setText("");
+    }
+    
+    private void Insertar(){
+        Conexion conn = new Conexion();
+
+        String nombre = (txtNombre.getText());
+        float deuda = Float.parseFloat(txtDeuda.getText());
+        float abono = Float.parseFloat(txtAbono.getText());
+        float pendiente = deuda - abono;
+        
+        String Deuda = String.valueOf(deuda);
+        String Abono = String.valueOf(abono);
+        
+        int Pendiente = (int)pendiente;
+        
+        Clientes cli;
+        cli = new Clientes(nombre,Deuda,Abono,Pendiente);
+        conn.insertarClientes(cli);
+        
+        Limpiar();
+        cargarTabla();
+    }
+    
+    private void Actualizar(){
+        Conexion con = new Conexion();
+
+        String Id = (txtId.getText());
+        int id = Integer.parseInt(Id);
+        
+        String nombre = (txtNombre.getText());
+
+        String deuda = (txtDeuda.getText());
+        
+        String abono = (txtAbono.getText());
+        
+        int pendiente = Integer.parseInt(deuda) - Integer.parseInt(abono);
+
+//        int activo = 1;
+        Productos dt = new Productos(abono,deuda,pendiente,id,nombre);
+
+        con.actualizarClientes(dt);
+        cargarTabla();
+    }
+    
+    public void cargarTabla() {
+
+        DefaultTableModel modeloTabla = (DefaultTableModel) clientesTable.getModel();
+        modeloTabla.setRowCount(0);
+
+        PreparedStatement ps;
+        ResultSet rs;
+        ResultSetMetaData rsmd;
+
+        int columnas;
+
+        int[] anchos = {10,31, 10, 20,20};
+
+        for (int i = 0; i < clientesTable.getColumnCount(); i++) {
+            clientesTable.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
+
+        try {
+            Connection con = Conexion.getConexion();
+            ps = con.prepareStatement("SELECT Id,nombre,deuda,abono,pendiente FROM clientes");
+
+            rs = ps.executeQuery();
+            rsmd = rs.getMetaData();
+            columnas = rsmd.getColumnCount();
+
+            while (rs.next()) {
+                Object[] fila = new Object[columnas];
+                for (int indice = 0; indice < columnas; indice++) {
+                    fila[indice] = rs.getObject(indice + 1);
+                }
+                modeloTabla.addRow(fila);
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.toString());
+        }
+        
+    }
+    
+    private void Borrar(){
+        Conexion conn = new Conexion();
+        System.out.println(txtId.getText());
+        String id = (txtId.getText());
+        int IdCliente = Integer.parseInt(id);
+
+        Clientes cli = new Clientes(IdCliente);
+        
+        conn.borrarClientes(cli);
+        Limpiar();
+    }
+    
+    private void Buscar(){
+        Conexion con = new Conexion();
+        String id = (txtNombre.getText());
+//        int IdCliente = Integer.parseInt(id);
+
+        Productos dt = new Productos(id);
+        con.buscarCliente(dt);
+        buscarTabla();
+    }
+    
+    public void buscarTabla(){
+        String campo = txtNombre.getText();
+
+        DefaultTableModel modeloTabla = (DefaultTableModel) clientesTable.getModel();
+        modeloTabla.setRowCount(0);
+
+        PreparedStatement ps;
+        ResultSet rs;
+        ResultSetMetaData rsmd;
+
+        int columnas;
+
+        int[] anchos = {5, 30, 10, 20, 20};
+
+        for (int i = 0; i < clientesTable.getColumnCount(); i++) {
+            clientesTable.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
+        }
+
+        try {
+            Connection con = Conexion.getConexion();
+            ps = con.prepareStatement("SELECT id,nombre,deuda,abono,pendiente FROM clientes WHERE id = '"
+                    + campo + "'");
+
+            System.out.println(ps);
+
+            rs = ps.executeQuery();
+            rsmd = rs.getMetaData();
+            columnas = rsmd.getColumnCount();
+
+            while (rs.next()) {
+                Object[] fila = new Object[columnas];
+                for (int indice = 0; indice < columnas; indice++) {
+                    fila[indice] = rs.getObject(indice + 1);
+                }
+                modeloTabla.addRow(fila);
+            }
+        } catch (SQLException e) {
+        }
+    }
+    
+    
+    private void txtResultanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtResultanteActionPerformed
+        //Nothing
+    }//GEN-LAST:event_txtResultanteActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        Insertar();
+        cargarTabla();
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        Borrar();
+       cargarTabla();
+    }//GEN-LAST:event_btnBorrarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        Buscar();
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        Actualizar();
+        cargarTabla();
+    }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        Limpiar();
+        cargarTabla();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void clientesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clientesTableMouseClicked
+        PreparedStatement ps;
+        ResultSet rs;
+
+        try {
+            Conexion con = new Conexion();
+            Connection conn = Conexion.getConexion();
+
+            int fila = clientesTable.getSelectedRow();
+            int id = Integer.parseInt(clientesTable.getValueAt(fila, 0).toString());
+
+            ps = conn.prepareStatement("SELECT Id,nombre,deuda,abono,pendiente FROM clientes WHERE id =?");
+
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                txtId.setText(rs.getString("Id"));
+                txtNombre.setText(rs.getString("nombre"));
+                txtDeuda.setText(rs.getString("deuda"));
+                txtAbono.setText(rs.getString("abono"));
+                txtResultante.setText(rs.getString("pendiente"));
+            }
+            } catch (SQLException e) {
+            System.out.println(e.toString());
+        } 
+    }//GEN-LAST:event_clientesTableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -236,26 +528,31 @@ public class CLIENTES extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnREACCLIENTE;
-    private javax.swing.JButton btnREACVENTA;
-    private javax.swing.JButton btnRegresar;
-    private javax.swing.JButton btnRegresar1;
-    private javax.swing.JButton btnRegresar2;
-    private javax.swing.JButton btnRegresar3;
-    private javax.swing.JButton btnRegresar4;
-    private javax.swing.JButton btnRegresar5;
+    private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnBorrar;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JButton btnRegresar6;
+    private javax.swing.JTable clientesTable;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTextField txtAbono;
+    private javax.swing.JTextField txtDeuda;
+    private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtResultante;
     // End of variables declaration//GEN-END:variables
 }
